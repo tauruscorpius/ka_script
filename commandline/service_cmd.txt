@@ -1,0 +1,41 @@
+1: monitor 启动任务
+
+[1] 开机自启动
+
+# rc.local 添加可执行权限
+
+chmod +x /etc/rc.d/rc.local
+
+
+# 在rc.log 中添加一行
+
+vi /etc/rc.d/rc.local
+
+行尾添加一行
+
+/etc/keepalived/tool_start_monitor.sh "boot"
+
+
+[2] crontab -e # crontab 每过一段时间拉一次，如果monitor没启动则启动，保证 monitor 在线
+
+* * * * *  sleep 15; /etc/keepalived/service_monitor.sh
+* * * * *  sleep 30; /etc/keepalived/service_monitor.sh
+* * * * *  sleep 45; /etc/keepalived/service_monitor.sh
+
+
+2: start service monitor 
+
+/etc/keepalived/tool_start_monitor.sh
+
+
+3: start keepalived
+
+/etc/keepalived/tool_start_keepalived.sh
+
+
+4: stop
+
+/etc/keepalived/tool_stop_keepalived.sh
+
+# 当执行完stop命令，请确认是否真的停掉了，如果没有，需要使用 kill 命令进行杀对应的keepalived服务进程。
+
